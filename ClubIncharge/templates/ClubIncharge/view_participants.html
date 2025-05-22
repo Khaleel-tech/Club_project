@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Participants</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            padding: 1rem 0;
+        }
+
+        .event-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .stats-card h3 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-card p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+            color: #6c757d;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: white;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 1.5rem;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            font-weight: 500;
+            color: #495057;
+            background-color: #f8f9fa;
+            border-top: none;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .badge {
+            padding: 0.6em 1em;
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: #2575fc;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #1a68fc;
+        }
+
+        .table-responsive {
+            border-radius: 15px;
+        }
+
+        .event-info {
+            position: relative;
+            z-index: 1;
+        }
+
+        .event-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-details {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        /* Animation for stats cards */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stats-card {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .stats-card:nth-child(1) { animation-delay: 0.1s; }
+        .stats-card:nth-child(2) { animation-delay: 0.2s; }
+        .stats-card:nth-child(3) { animation-delay: 0.3s; }
+        .stats-card:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'ClubIncharge:ClubIncHome' %}">
+                <i class="bi bi-house-door me-2"></i>Club Incharge Portal
+            </a>
+            <div>
+                <a href="{% url 'ClubIncharge:my_events' %}" class="btn btn-outline-primary me-2">
+                    <i class="bi bi-calendar-event me-2"></i>My Events
+                </a>
+                <a href="#" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right me-2"></i>Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="event-header">
+        <div class="container event-info">
+            <h1 class="event-title">{{ event.name }}</h1>
+            <p class="event-details mb-0">
+                <i class="bi bi-calendar-event me-2"></i>{{ event.title }}
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Attendance Statistics -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-people mb-3 text-primary" style="font-size: 2rem;"></i>
+                    <h3 class="text-primary">{{ registrations|length }}</h3>
+                    <p>Total Registrations</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-person-check mb-3 text-success" style="font-size: 2rem;"></i>
+                    <h3 class="text-success">{{ present_count }}</h3>
+                    <p>Present</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-person-x mb-3 text-danger" style="font-size: 2rem;"></i>
+                    <h3 class="text-danger">{{ absent_count }}</h3>
+                    <p>Absent</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-graph-up mb-3 text-info" style="font-size: 2rem;"></i>
+                    <h3 class="text-info">{{ attendance_percentage }}%</h3>
+                    <p>Attendance Rate</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-list-check me-2"></i>Registered Participants
+                </h4>
+                <div>
+                    <span class="badge bg-primary me-2">
+                        <i class="bi bi-people-fill me-1"></i>Total: {{ registrations|length }}
+                    </span>
+                    <a href="{% url 'ClubIncharge:take_attendance' event.id %}" class="btn btn-primary">
+                        <i class="bi bi-pencil-square me-2"></i>Take Attendance
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if registrations %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Roll Number</th>
+                                <th>Branch</th>
+                                <th>Registration Date</th>
+                                <th>Attendance Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for registration in registrations %}
+                            <tr>
+                                <td>
+                                    <i class="bi bi-person-circle me-2"></i>
+                                    {{ registration.student.name }}
+                                </td>
+                                <td>{{ registration.student.username }}</td>
+                                <td>{{ registration.student.branch }}</td>
+                                <td>
+                                    <i class="bi bi-calendar2-check me-2"></i>
+                                    {{ registration.registration_date|date:"M d, Y" }}
+                                </td>
+                                <td>
+                                    {% if registration.attended %}
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-check-circle me-1"></i>Present
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-danger">
+                                            <i class="bi bi-x-circle me-1"></i>Absent
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
+                    <h5 class="mt-3">No Participants Yet</h5>
+                    <p class="text-muted">There are no registrations for this event yet.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

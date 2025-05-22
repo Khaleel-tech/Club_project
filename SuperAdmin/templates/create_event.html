@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --gradient-start: #4158D0;
+            --gradient-middle: #C850C0;
+            --gradient-end: #FFCC70;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, 
+                var(--gradient-start), 
+                var(--gradient-middle), 
+                var(--gradient-end)
+            );
+            background-size: 200% 200%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding: 40px 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .card {
+            border: none;
+            background: transparent;
+        }
+
+        .card-header {
+            background: linear-gradient(45deg, 
+                var(--gradient-start), 
+                var(--gradient-middle)
+            );
+            padding: 25px;
+            border-radius: 20px 20px 0 0 !important;
+        }
+
+        .card-title {
+            color: white;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            text-align: center;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #444;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .required-field::after {
+            content: "*";
+            color: #ff4757;
+            margin-left: 4px;
+        }
+
+        .form-control, .form-select {
+            padding: 12px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--gradient-middle);
+            box-shadow: 0 0 0 4px rgba(200, 80, 192, 0.1);
+            outline: none;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+        }
+
+        .form-text {
+            color: #666;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .invalid-feedback {
+            color: #ff4757;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, 
+                var(--gradient-start), 
+                var(--gradient-middle)
+            );
+            border: none;
+            box-shadow: 0 5px 15px rgba(65, 88, 208, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(65, 88, 208, 0.4);
+            background: linear-gradient(45deg, 
+                var(--gradient-middle), 
+                var(--gradient-start)
+            );
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
+            background: #5a6268;
+        }
+
+        .alert {
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .alert-danger {
+            background: linear-gradient(45deg, #ff6b6b, #ff8787);
+            color: white;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                margin: 10px;
+            }
+            
+            .card-header {
+                padding: 20px;
+            }
+            
+            .card-title {
+                font-size: 24px;
+            }
+            
+            .card-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Create New Event</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Please correct the errors below.
+                            </div>
+                        {% endif %}
+
+                        {% for field in form %}
+                            <div class="mb-4">
+                                <label for="{{ field.id_for_label }}" class="form-label {% if field.field.required %}required-field{% endif %}">
+                                    {{ field.label }}
+                                </label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <small class="form-text">
+                                        <i class="fas fa-info-circle"></i>
+                                        {{ field.help_text }}
+                                    </small>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        {{ field.errors|join:", " }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'SuperAdminHome' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus-circle"></i> Create Event
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

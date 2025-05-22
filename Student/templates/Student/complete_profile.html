@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Your Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #f0f2f5;
+            --border-color: #e9ecef;
+            --text-color: #2c3e50;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --hover-color: #2980b9;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .form-container {
+            background: linear-gradient(to bottom right, #ffffff, #f8f9fa);
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 30px auto;
+            max-width: 900px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 1.25rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary-color);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--error-color);
+        }
+
+        .form-control, .form-select {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            border-color: var(--secondary-color);
+        }
+
+        .errorlist {
+            color: var(--error-color);
+            list-style: none;
+            padding-left: 0;
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--secondary-color), var(--hover-color));
+            border: none;
+            padding: 12px 24px;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(135deg, var(--hover-color), var(--secondary-color));
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Email field styling */
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group .form-control[readonly] {
+            background: linear-gradient(to right, #f8f9fa, #ffffff) !important;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .input-group-text {
+            background-color: #f8f9fa;
+            border-left: none;
+        }
+        
+        .text-muted {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        /* Add a subtle highlight to the email field */
+        .input-group:focus-within {
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+        
+        /* Style for the automatically generated email message */
+        .auto-email-message {
+            background-color: #e8f4f8;
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            border: 1px solid #bde0f3;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .auto-email-message i {
+            color: #3498db;
+        }
+
+        .auto-email-message strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .input-group .form-control[readonly] {
+            background-color: #f8f9fa !important;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        /* Icon styling for section titles and form fields */
+        .section-title i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .section-title:hover i {
+            transform: scale(1.1);
+        }
+
+        .input-group-text i {
+            width: 16px;
+        }
+
+        .form-icon-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-icon-group i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .form-icon-group:focus-within i {
+            color: var(--hover-color);
+        }
+
+        .form-icon-group .form-control,
+        .form-icon-group .form-select {
+            padding-left: 35px;
+        }
+
+        /* Card-like sections */
+        .form-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Animated form elements */
+        .form-control, .form-select, .btn {
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:hover, .form-select:hover {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2 class="text-center mb-4" style="color: var(--primary-color); font-weight: 600; letter-spacing: 0.5px;">
+                <i class="fas fa-user-graduate me-2"></i>Complete Your Profile
+            </h2>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <!-- Personal Information -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-user"></i>Personal Information
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="{{ form.name.id_for_label }}" class="form-label required">Name</label>
+                            <div class="form-icon-group">
+                                <i class="fas fa-user-circle"></i>
+                                {{ form.name }}
+                            </div>
+                            {{ form.name.errors }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.mobile_number.id_for_label }}" class="form-label required">Mobile Number</label>
+                            {{ form.mobile_number }}
+                            {{ form.mobile_number.errors }}
+                        </div>
+                    </div>
+
+                    <!-- Email Field with Better Styling -->
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">Email</label>
+                            <div class="input-group">
+                                <input type="text" 
+                                       class="form-control" 
+                                       value="{{ request.session.username }}@kluniversity.in" 
+                                       readonly
+                                       id="{{ form.email.id_for_label }}"
+                                       name="email"
+                                       style="background-color: #f8f9fa;">
+                                <span class="input-group-text" style="background-color: #e8f4f8;">
+                                    <i class="fas fa-check-circle text-success"></i>
+                                </span>
+                            </div>
+                            {% comment %} <div class="auto-email-message mt-2">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Your email: <strong>{{ request.session.username }}@kluniversity.in</strong></span>
+                            </div> {% endcomment %}
+                            {{ form.email.errors }}
+                        </div>
+                    </div>
+
+                    <!-- Basic Information -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="{{ form.date_of_birth.id_for_label }}" class="form-label required">Date of Birth</label>
+                            {{ form.date_of_birth }}
+                            {{ form.date_of_birth.errors }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.gender.id_for_label }}" class="form-label required">Gender</label>
+                            {{ form.gender }}
+                            {{ form.gender.errors }}
+                        </div>
+                    </div>
+
+                    <!-- Academic Information -->
+                    <div class="section-title mt-4">Academic Information</div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="{{ form.branch.id_for_label }}" class="form-label required">Branch</label>
+                            {{ form.branch }}
+                            {{ form.branch.errors }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.year.id_for_label }}" class="form-label required">Year</label>
+                            {{ form.year }}
+                            {{ form.year.errors }}
+                        </div>
+                    </div>
+
+                    <!-- Residence Information -->
+                    <div class="section-title mt-4">Residence Information</div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="{{ form.residence.id_for_label }}" class="form-label required">Residence Type</label>
+                            {{ form.residence }}
+                            {{ form.residence.errors }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ form.cluster.id_for_label }}" class="form-label required">Cluster</label>
+                            {{ form.cluster }}
+                            {{ form.cluster.errors }}
+                        </div>
+                    </div>
+
+                    <!-- Conditional Fields -->
+                    {% if residence == 'Hostel' %}
+                        {% if gender == 'Female' %}
+                            <!-- Girls Hostel Field -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="{{ form.girls_hostel.id_for_label }}" class="form-label required">Girls Hostel</label>
+                                    {{ form.girls_hostel }}
+                                    {{ form.girls_hostel.errors }}
+                                </div>
+                            </div>
+                        {% elif gender == 'Male' %}
+                            <!-- Boys Hostel Fields -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="{{ form.hostel_boys_campus.id_for_label }}" class="form-label required">Boys Hostel Campus</label>
+                                    {{ form.hostel_boys_campus }}
+                                    {{ form.hostel_boys_campus.errors }}
+                                </div>
+                            </div>
+
+                            {% if hostel_boys_campus == 'in campus' %}
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <label for="{{ form.hostel_boys_in_campus.id_for_label }}" class="form-label required">Boys In-Campus Hostel</label>
+                                        {{ form.hostel_boys_in_campus }}
+                                        {{ form.hostel_boys_in_campus.errors }}
+                                    </div>
+                                </div>
+                            {% elif hostel_boys_campus == 'outside campus' %}
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <label for="{{ form.hostel_boys_outside_campus.id_for_label }}" class="form-label required">Boys Outside Campus Hostel</label>
+                                        {{ form.hostel_boys_outside_campus }}
+                                        {{ form.hostel_boys_outside_campus.errors }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% elif residence == 'Day Scholar' %}
+                        <!-- Transport Fields -->
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label for="{{ form.transport.id_for_label }}" class="form-label required">Transport</label>
+                                {{ form.transport }}
+                                {{ form.transport.errors }}
+                            </div>
+                        </div>
+
+                        {% if transport == 'College Bus' %}
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="{{ form.bus_route.id_for_label }}" class="form-label required">Bus Route</label>
+                                    {{ form.bus_route }}
+                                    {{ form.bus_route.errors }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    <!-- Location Information -->
+                    <div class="section-title mt-4">Location Information</div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="{{ form.country.id_for_label }}" class="form-label required">Country</label>
+                            {{ form.country }}
+                            {{ form.country.errors }}
+                        </div>
+                        {% if country == 'India' %}
+                            <div class="col-md-6">
+                                <label for="{{ form.state.id_for_label }}" class="form-label required">State</label>
+                                {{ form.state }}
+                                {{ form.state.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password -->
+                    <div class="section-title mt-4">Security</div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="{{ form.password.id_for_label }}" class="form-label required">Password</label>
+                            {{ form.password }}
+                            {{ form.password.errors }}
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Complete Profile</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const updateFields = ['residence', 'transport', 'hostel_boys_campus', 'country'];
+        let isAutoSubmit = false;
+
+        // Function to handle form updates without page reload
+        async function handleFieldUpdate(event) {
+            event.preventDefault();
+            const field = event.target;
+            
+            // Save current scroll position
+            const currentScroll = window.scrollY;
+            
+            // Create form data
+            const formData = new FormData(form);
+            formData.append('auto_update', 'true');
+
+            try {
+                // Make AJAX request instead of form submission
+                const response = await fetch(window.location.href, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (response.ok) {
+                    const html = await response.text();
+                    
+                    // Create a temporary container
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    
+                    // Find the form in the new content
+                    const newForm = temp.querySelector('form');
+                    
+                    // Update only the form contents
+                    if (newForm) {
+                        form.innerHTML = newForm.innerHTML;
+                    }
+                    
+                    // Restore scroll position
+                    window.scrollTo(0, currentScroll);
+                    
+                    // Reattach event listeners
+                    attachFieldListeners();
+                }
+            } catch (error) {
+                console.error('Error updating form:', error);
+            }
+        }
+
+        // Function to attach event listeners to fields
+        function attachFieldListeners() {
+            updateFields.forEach(fieldName => {
+                const field = form.querySelector(`[name="${fieldName}"]`);
+                if (field) {
+                    // Remove existing listeners first
+                    field.removeEventListener('change', handleFieldUpdate);
+                    // Add new listener
+                    field.addEventListener('change', handleFieldUpdate);
+                }
+            });
+        }
+
+        // Initial attachment of listeners
+        attachFieldListeners();
+
+        // Handle regular form submission
+        form.addEventListener('submit', function(e) {
+            if (!isAutoSubmit) {
+                // Normal form submission
+                return true;
+            }
+            e.preventDefault();
+        });
+    });
+    </script>
+</body>
+</html>
+

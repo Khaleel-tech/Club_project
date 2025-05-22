@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.title }} - Event Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .event-header {
+            background-color: #f8f9fa;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        .event-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        .registration-status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .event-details {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .info-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    {% if event.event_poster %}
+                        <img src="{{ event.event_poster.url }}" class="event-image" alt="{{ event.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h1 class="card-title">{{ event.title }}</h1>
+                        <p class="card-text">{{ event.description|linebreaks }}</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Event Information</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Location:</strong> {{ event.location }}</p>
+                                <p><strong>Start Date:</strong> {{ event.start_date|date:"F d, Y - h:i A" }}</p>
+                                <p><strong>End Date:</strong> {{ event.end_date|date:"F d, Y - h:i A" }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Registration Deadline:</strong> {{ event.registration_deadline|date:"F d, Y - h:i A" }}</p>
+                                <p><strong>Available Spots:</strong> {{ available_spots }}</p>
+                                <p><strong>Total Registered:</strong> {{ total_registered }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Registration Status</h5>
+                        {% if is_registered %}
+                            <div class="alert alert-success">
+                                <h4 class="alert-heading">You are registered!</h4>
+                                {% if is_registration_open %}
+                                    <form action="{% url 'Student:unregister_event' event.id %}" method="GET" class="mt-3">
+                                        <button type="submit" class="btn btn-danger w-100">Unregister</button>
+                                    </form>
+                                {% else %}
+                                    <p class="mb-0">Registration period has ended.</p>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            {% if is_registration_open %}
+                                {% if available_spots == "Unlimited" or available_spots > 0 %}
+                                    <div class="alert alert-info">
+                                        <h4 class="alert-heading">Registration Open</h4>
+                                        <p>Closes on {{ event.registration_deadline|date:"F d, Y - h:i A" }}</p>
+                                        <form action="{% url 'Student:register_event' event.id %}" method="GET">
+                                            <button type="submit" class="btn btn-primary w-100">Register Now</button>
+                                        </form>
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-warning">
+                                        <h4 class="alert-heading">Event Full</h4>
+                                        <p class="mb-0">Maximum capacity reached ({{ event.max_participants }} participants)</p>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <div class="alert alert-danger">
+                                    <h4 class="alert-heading">Registration Closed</h4>
+                                    <p class="mb-0">Deadline was {{ event.registration_deadline|date:"F d, Y - h:i A" }}</p>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <a href="{% url 'Student:student_events' %}" class="btn btn-secondary w-100">Back to Events</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

@@ -1,0 +1,318 @@
+<!-- ViewStudents.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Students</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem 1rem;
+        }
+
+        .table-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 0 auto;
+            max-width: 1200px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .table-title {
+            color: #1e3c72;
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .table-title i {
+            font-size: 1.6rem;
+        }
+
+        .filter-container {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            height: 38px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #1e3c72;
+            box-shadow: 0 0 0 0.2rem rgba(30,60,114,0.1);
+        }
+
+        .table {
+            margin-bottom: 2rem;
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            font-weight: 500;
+            border: none;
+            padding: 1rem;
+        }
+
+        .table tbody td {
+            vertical-align: middle;
+            padding: 1rem;
+            color: #212529;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30,60,114,0.3);
+        }
+
+        .btn-sm {
+            padding: 0.4rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .dashboard-btn {
+            margin-top: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .table-container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .table-container {
+                padding: 1rem;
+            }
+
+            .table-title {
+                font-size: 1.5rem;
+            }
+
+            .filter-container {
+                padding: 1rem;
+            }
+
+            .table-responsive {
+                margin: 0 -1rem;
+                width: calc(100% + 2rem);
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+            }
+
+            .form-select {
+                padding: 0.5rem 1rem;
+                padding-right: 2.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        /* Custom scrollbar for table */
+        .table-responsive::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #2a5298;
+            border-radius: 4px;
+        }
+
+        .form-select {
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            background-color: #fff !important;
+            border: 2px solid #e9ecef !important;
+            border-radius: 8px !important;
+            padding: 0.6rem 1rem !important;
+            height: 42px !important;
+            width: 100% !important;
+            cursor: pointer !important;
+            color: #2a5298 !important;
+            font-size: 0.95rem !important;
+            font-weight: 500 !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%232a5298' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: calc(100% - 1rem) center !important;
+            padding-right: 2.5rem !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+        }
+
+        .form-select:focus {
+            border-color: #1e3c72 !important;
+            box-shadow: 0 0 0 0.2rem rgba(30,60,114,0.1) !important;
+            outline: none !important;
+        }
+
+        .form-select:hover {
+            border-color: #1e3c72 !important;
+        }
+
+        .form-select option {
+            padding: 10px !important;
+            font-size: 0.95rem !important;
+            color: #2a5298 !important;
+            background-color: #fff !important;
+        }
+
+        /* Override any Bootstrap default styles */
+        .form-select::-ms-expand {
+            display: none !important;
+        }
+
+        .form-select option:checked {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%) !important;
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <h2 class="table-title">
+            <i class="fas fa-users"></i>
+            Students List
+        </h2>
+        
+        <div class="filter-container">
+            <form id="filterForm" method="get" class="mb-3">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-6">
+                        <input type="text" name="search" class="form-control" 
+                               placeholder="Search by username" value="{{ search_query }}">
+                    </div>
+                    <div class="col-md-4">
+                        <select name="role" class="form-select" required>
+                            <option value="" selected disabled>Select Role</option>
+                            <option value="All">All Roles</option>
+                            <option value="Super Admin">Super Admin</option>
+                            <option value="Student">Student</option>
+                            <option value="Report Manager">Report Manager</option>
+                            <option value="Club Incharge">Club Incharge</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search"></i>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Year</th>
+                        <th>Branch</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.username }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.mobile_number }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.year }}</td>
+                        <td>{{ student.branch }}</td>
+                        <td>
+                            <a href="{% url 'student_profile' student.username %}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-eye"></i>
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="empty-message">
+                            <i class="fas fa-info-circle me-2"></i>
+                            No students found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center dashboard-btn">
+            <a href="{% url 'SuperAdminHome' %}" class="btn btn-primary">
+                <i class="fas fa-home"></i>
+                Go to Dashboard
+            </a>
+        </div>
+    </div>
+</body>
+</html>

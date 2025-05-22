@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Incharge Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 2.5rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .event-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .event-image {
+            height: 200px;
+            object-fit: cover;
+        }
+        .activity-item {
+            padding: 1.2rem;
+            border-left: 4px solid #2575fc;
+            margin-bottom: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .activity-item:hover {
+            transform: translateX(5px);
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .card-header {
+            border-bottom: none;
+            background: transparent;
+            padding: 1.5rem;
+        }
+        .alert {
+            border-radius: 10px;
+        }
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1>Welcome, {{ incharge.name }}</h1>
+                    <p class="mb-0">Manage your events and track registrations</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <a href="{% url 'ClubIncharge:my_events' %}" class="btn btn-light me-2">
+                        <i class="bi bi-calendar-event"></i> View All Events
+                    </a>
+                    <a href="{% url 'ClubIncharge:create_event' %}" class="btn btn-light">
+                        <i class="bi bi-plus-circle"></i> Create New Event
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-calendar-event text-primary fs-1"></i>
+                    <h3 class="mt-3 fw-bold">{{ events|length }}</h3>
+                    <p class="text-muted mb-0">Total Events</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <i class="bi bi-people text-success fs-1"></i>
+                    <h3 class="mt-3">{{ recent_registrations|length }}</h3>
+                    <p class="text-muted mb-0">Recent Registrations</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <i class="bi bi-calendar2-check text-info fs-1"></i>
+                    <h3 class="mt-3">{{ events|length }}</h3>
+                    <p class="text-muted mb-0">Active Events</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <i class="bi bi-person-badge text-warning fs-1"></i>
+                    <h3 class="mt-3">{{ incharge.id_number }}</h3>
+                    <p class="text-muted mb-0">Incharge ID</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="row">
+            <!-- Events Section -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Your Events</h5>
+                        <div class="btn-group">
+                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                Filter Events
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">All Events</a></li>
+                                <li><a class="dropdown-item" href="#">Active Events</a></li>
+                                <li><a class="dropdown-item" href="#">Past Events</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        {% if events %}
+                            <div class="row">
+                                {% for event in events %}
+                                    <div class="col-md-6">
+                                        <div class="card event-card">
+                                            {% if event.event_poster %}
+                                                <img src="{{ event.event_poster.url }}" class="card-img-top event-image" alt="{{ event.title }}">
+                                            {% else %}
+                                                <div class="card-img-top event-image bg-light d-flex align-items-center justify-content-center">
+                                                    <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                                                </div>
+                                            {% endif %}
+                                            <div class="card-body">
+                                                <h5 class="card-title">{{ event.title }}</h5>
+                                                <p class="card-text">{{ event.description|truncatewords:20 }}</p>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <a href="{% url 'ClubIncharge:event_participants' event.id %}" class="btn btn-primary btn-sm">
+                                                        <i class="bi bi-people"></i> View Participants
+                                                    </a>
+                                                    {% if request.session.role == 'Super Admin' %}
+                                                        <form method="post" action="{% url 'delete_event' event.id %}" class="d-inline">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn btn-danger btn-sm" 
+                                                                    onclick="return confirm('Are you sure you want to delete this event?')">
+                                                                <i class="fas fa-trash"></i> Delete
+                                                            </button>
+                                                        </form>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="card-footer text-muted">
+                                                <small><i class="bi bi-clock"></i> Created {{ event.created_at|timesince }} ago</small>
+                                            </div>
+                                        </div>
+
+                                        <!-- Delete Modal -->
+                                        <!-- Update the delete button section in your modal -->
+                                        <div class="modal fade" id="deleteEventModal{{ event.id }}" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Confirm Delete</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>Are you sure you want to delete "{{ event.title }}"?</p>
+                                                        <div class="alert alert-warning">
+                                                            <i class="bi bi-exclamation-triangle"></i>
+                                                            This action cannot be undone!
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                        <form action="{% url 'ClubIncharge:delete_event' event.id %}" method="POST" style="display: inline;">
+                                                            {% csrf_token %}
+                                                            <button type="submit" class="btn btn-danger">
+                                                                <i class="bi bi-trash"></i> Delete Event
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="bi bi-calendar-x text-muted" style="font-size: 3rem;"></i>
+                                <h5 class="mt-3">No Events Found</h5>
+                                <p class="text-muted">Create your first event to get started</p>
+                                <a href="{% url 'ClubIncharge:create_event' %}" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle"></i> Create Event
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities Section -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Recent Activities</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if recent_registrations %}
+                            {% for registration in recent_registrations %}
+                                <div class="activity-item">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>{{ registration.student.name }}</strong>
+                                        <small class="text-muted">{{ registration.registration_date|timesince }} ago</small>
+                                    </div>
+                                    <p class="mb-0 text-muted">
+                                        Registered for {{ registration.event.title }}
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="bi bi-activity text-muted" style="font-size: 2rem;"></i>
+                                <p class="mt-2 mb-0">No recent activities</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

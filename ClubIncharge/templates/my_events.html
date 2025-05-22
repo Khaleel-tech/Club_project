@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Events</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'ClubIncharge:ClubIncHome' %}">Club Incharge Portal</a>
+            <div>
+                <a href="{% url 'my_events' %}" class="btn btn-outline-primary">My Events</a>
+                <!-- Update the View Participants button in your event card -->
+                {% comment %} <a href="{% url 'ClubIncharge:view_participants' event.id %}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-people"></i> View Participants
+                </a> {% endcomment %}
+                <a href="#" class="btn btn-outline-danger">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 class="mb-4">All Events</h2>
+        <div class="row">
+            {% for event in events %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ event.title }}</h5>
+                        {% comment %} <p class="card-text">{{ event.description }}</p> {% endcomment %}
+                        <p><strong>Date:</strong> {{ event.start_date }}</p>
+                        <p><strong>Venue:</strong> {{ event.location }}</p>
+                        {% comment %} <p><strong>Status:</strong> {{ event.status }}</p> {% endcomment %}
+                        <a href="{% url 'ClubIncharge:view_participants' event.id %}" class="btn btn-primary">View Participants</a>
+                        {% comment %} <a href="{% url 'delete_event' event.id %}" class="btn btn-primary">Delete Event</a> {% endcomment %}
+                        
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">No events created yet.</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
